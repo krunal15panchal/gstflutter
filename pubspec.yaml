@@ -26,6 +26,10 @@ dependencies:
   hexcolor: ^1.0.1
   page_transition: ^1.1.5
   introduction_screen: ^1.0.7
+  firebase_auth: ^0.16.0
+  cloud_firestore: ^0.13.5
+  flutter_recaptcha_v2: ^0.1.0
+  recaptchav2_plugin: ^1.0.0
 
 dev_dependencies:
   flutter_test:

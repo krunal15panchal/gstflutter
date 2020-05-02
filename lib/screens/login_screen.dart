@@ -1,14 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gst/screens/main_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gst/screens/recaptcha_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  static bool enable = false;
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   double screenHeight;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _gst = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Firestore _db = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 15,
                   ),
                   TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                         labelText: "USERNAME", hasFloatingPlaceholder: true),
                   ),
@@ -114,6 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 20,
                   ),
                   TextFormField(
+                    obscureText: true,
+                    controller: _passwordController,
                     decoration: InputDecoration(
                         labelText: "PASSWORD", hasFloatingPlaceholder: true),
                   ),
@@ -121,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: _gst,
                     decoration: InputDecoration(
                         labelText: "GST NUMBER", hasFloatingPlaceholder: true),
                   ),
@@ -131,7 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReCaptchaScreen()));
+                        },
                         child: Text("VERIFY RECAPTHA"),
                       ),
                       Expanded(
@@ -146,12 +164,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainScreen(),
-                            ),
-                          );
+                          if(LoginScreen.enable==true)
+                            {
+                              signIn();
+                            }
+                          else
+                            {
+                              _error();
+                            }
                         },
                       )
                     ],
@@ -162,6 +182,126 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  void signIn() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text;
+    String gst = _gst.text;
+
+    if (email.isNotEmpty && password.isNotEmpty && gst.isNotEmpty) {
+      _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((user) {
+        _db.collection("users").document(user.user.uid).setData({
+          "email": email,
+          "lastseen": DateTime.now(),
+          "gst": gst,
+          //"signin_method": user.user.providerId
+        });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(),
+          ),
+        );
+      }).catchError(
+        (e) {
+          return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                content: Stack(
+                  overflow: Overflow.visible,
+                  children: <Widget>[
+                    Positioned(
+                      right: -40.0,
+                      top: -40.0,
+                      child: InkResponse(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: CircleAvatar(
+                          child: Icon(Icons.close),
+                          backgroundColor: Hexcolor("#305c91"),
+                        ),
+                      ),
+                    ),
+                    Text("${e.message}"),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            content: Stack(
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Positioned(
+                  right: -40.0,
+                  top: -40.0,
+                  child: InkResponse(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: CircleAvatar(
+                      child: Icon(Icons.close),
+                      backgroundColor: Hexcolor("#305c91"),
+                    ),
+                  ),
+                ),
+                Text("email password and gst number cannot be empty."),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  _error(){
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          content: Stack(
+            overflow: Overflow.visible,
+            children: <Widget>[
+              Positioned(
+                right: -40.0,
+                top: -40.0,
+                child: InkResponse(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: CircleAvatar(
+                    child: Icon(Icons.close),
+                    backgroundColor: Hexcolor("#305c91"),
+                  ),
+                ),
+              ),
+              Text("all fields are required and please verify recaptcha.."),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'login_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -10,8 +13,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String s="#2f5b91";
-  Hexcolor h;
+
   var pages = [
     PageViewModel(
         title: "GSTR1",
@@ -39,7 +41,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
           child: Center(
             child: FlatButton(
-              onPressed: () {},
+              onPressed: () {
+
+              },
               child: Text(
                 "PROCEED",
                 style: TextStyle(color: Colors.white, fontSize: 24,fontWeight: FontWeight.w900),
@@ -105,37 +109,70 @@ class _MainScreenState extends State<MainScreen> {
       theme: ThemeData(
         fontFamily: "Ubuntu",
       ),
-      home: Scaffold(
-        body: IntroductionScreen(
-          pages: pages,
-          onDone: () {},
-          onSkip: () {
-            // You can also override onSkip callback
-          },
-          showSkipButton: false,
-          skip: const Icon(
-            Icons.skip_next,
-            color: Colors.white,
+      home: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color.fromRGBO(38, 87, 137, 1.0),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: <Color>[
+                    Colors.black,
+                    Color.fromRGBO(38, 87, 137, 1.0),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings_power),
+                color: Colors.white,
+                iconSize: 30,
+               // padding: EdgeInsets.only(right: 20),
+                onPressed: (){
+                  FirebaseAuth.instance.signOut();
+                },
+              )
+            ],
           ),
-          next: const Icon(
-            Icons.arrow_right,
-            color: Colors.white,
-          ),
-          done: const Text(
-            "Done",
-            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
-          ),
-          dotsDecorator: DotsDecorator(
-            size: const Size.square(10.0),
-            activeSize: const Size(20.0, 10.0),
-            activeColor: Colors.red,
-            color: Colors.white,
-            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-            activeShape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+          body: IntroductionScreen(
+            pages: pages,
+            onDone: () {},
+            onSkip: () {
+              // You can also override onSkip callback
+            },
+            showSkipButton: false,
+            skip: const Icon(
+              Icons.skip_next,
+              color: Colors.white,
+            ),
+            next: const Icon(
+              Icons.arrow_right,
+              color: Colors.white,
+            ),
+            done: const Text(
+              "Done",
+              style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+            ),
+            dotsDecorator: DotsDecorator(
+              size: const Size.square(10.0),
+              activeSize: const Size(20.0, 10.0),
+              activeColor: Colors.red,
+              color: Colors.white,
+              spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+              activeShape:
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  signOut(context)
+  {
+    return Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
   }
 }
