@@ -53,12 +53,9 @@ class _MainScreenState extends State<MainScreen> {
         ),
     ),
 
-
-
     PageViewModel(
       title: "GST3B",
-      body:
-          "FOR EVERY 10TH DATE OF THE MONTH ",
+      body: "FOR EVERY 10TH DATE OF THE MONTH ",
       image: Center(
         child: Padding(
           padding: EdgeInsets.only(left: 30),
@@ -100,6 +97,38 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     ),
+
+    PageViewModel(
+      titleWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: IconButton(
+              icon: Icon(Icons.settings_power),
+              iconSize: 50,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
+      body: "LOG OUT",
+      decoration: const PageDecoration(
+        //pageColor: Colors.deepPurple,
+        boxDecoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: <Color>[
+              Color.fromRGBO(38, 87, 137, 1.0),
+              Colors.black
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        bodyTextStyle: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w900),
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 24.0,fontWeight: FontWeight.w900),
+      ),
+    ),
   ];
 
   @override
@@ -111,32 +140,6 @@ class _MainScreenState extends State<MainScreen> {
       ),
       home: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Color.fromRGBO(38, 87, 137, 1.0),
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    Colors.black,
-                    Color.fromRGBO(38, 87, 137, 1.0),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.settings_power),
-                color: Colors.white,
-                iconSize: 30,
-               // padding: EdgeInsets.only(right: 20),
-                onPressed: (){
-                  FirebaseAuth.instance.signOut();
-                },
-              )
-            ],
-          ),
           body: IntroductionScreen(
             pages: pages,
             onDone: () {},

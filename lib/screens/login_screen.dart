@@ -25,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Ubuntu',
+      ),
       home: Scaffold(
         body: SingleChildScrollView(
           child: Stack(
@@ -164,14 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         onPressed: () {
-                          if(LoginScreen.enable==true)
-                            {
-                              signIn();
-                            }
-                          else
-                            {
-                              _error();
-                            }
+                          if (LoginScreen.enable == true) {
+                            signIn();
+                          } else {
+                            _error();
+                          }
                         },
                       )
                     ],
@@ -232,7 +232,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    Text("${e.message}"),
+                    Text(
+                      "${e.message}",
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
                   ],
                 ),
               );
@@ -264,7 +267,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                Text("email password and gst number cannot be empty."),
+                Text(
+                  "email password and gst number cannot be empty.",
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ],
             ),
           );
@@ -273,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  _error(){
+  _error() {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -297,7 +303,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              Text("all fields are required and please verify recaptcha.."),
+              Text(
+                "All fields are required and please verify recaptcha..",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ],
           ),
         );
