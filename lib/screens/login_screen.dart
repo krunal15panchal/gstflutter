@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:gst/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gst/screens/recaptcha_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static bool enable = false;
@@ -21,7 +20,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
+    screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -148,10 +150,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: <Widget>[
                       MaterialButton(
                         onPressed: () {
-                          Navigator.push(
+                          /*Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ReCaptchaScreen()));
+                                  builder: (context) => ReCaptchaScreen()));*/
                         },
                         child: Text("VERIFY RECAPTHA"),
                       ),
@@ -166,12 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             left: 38, right: 38, top: 15, bottom: 15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        onPressed: () {
-                          if (LoginScreen.enable == true) {
-                            signIn();
-                          } else {
-                            _error();
-                          }
+                        onPressed: () async {
+                          signIn();
                         },
                       )
                     ],
@@ -189,6 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text.trim();
     String password = _passwordController.text;
     String gst = _gst.text;
+    //double tcgst=g.tcgst;
 
     if (email.isNotEmpty && password.isNotEmpty && gst.isNotEmpty) {
       _auth
@@ -201,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //"signin_method": user.user.providerId
         });
 
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -208,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       }).catchError(
-        (e) {
+            (e) {
           return showDialog(
             context: context,
             builder: (BuildContext context) {

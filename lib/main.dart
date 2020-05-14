@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gst/screens/starting_screen1.dart';
-import 'package:gst/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gst/screens/starting_screen2.dart';
 //import '';
@@ -14,6 +13,9 @@ class MyGst extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Ubuntu',
+      ),
       home: HomePage(),
     );
   }

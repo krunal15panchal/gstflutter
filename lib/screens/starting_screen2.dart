@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'dart:async';
 import 'package:gst/screens/login_screen.dart';
-import 'package:page_transition/page_transition.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 class StartingScreen2 extends StatefulWidget {
   @override
